@@ -1,0 +1,163 @@
+{
+  "design": {
+    "N": 30,
+    "start_year": 2014,
+    "window": 5,
+    "WA_scale": 1.0,
+    "M": 0.2,
+    "anchor_year": 2014,
+    "indicator_system": "EXP13 v6 five-component bounded",
+    "PAR": {
+      "s_b": 0.3,
+      "v_S": 0.07,
+      "m0": 0.1,
+      "v_I": 0.05
+    },
+    "basis_ratio_nbs": 1.269578197812367,
+    "wx_seeds": [
+      2026,
+      2027,
+      2028,
+      2029,
+      2030,
+      2031,
+      2032,
+      2033,
+      2034,
+      2035
+    ],
+    "econ_seeds": [
+      1000,
+      1001,
+      1002,
+      1003,
+      1004,
+      1005,
+      1006,
+      1007,
+      1008,
+      1009
+    ],
+    "members_per_scenario": 100
+  },
+  "scenarios": [
+    {
+      "group": "baseline",
+      "scenario": "baseline",
+      "direction": "base",
+      "spec": {}
+    },
+    {
+      "group": "climate",
+      "scenario": "rain_freq_high",
+      "direction": "up",
+      "spec": {
+        "rain_freq": 1.25
+      }
+    },
+    {
+      "group": "climate",
+      "scenario": "rain_freq_low",
+      "direction": "down",
+      "spec": {
+        "rain_freq": 0.75
+      }
+    },
+    {
+      "group": "climate",
+      "scenario": "pet_high",
+      "direction": "up",
+      "spec": {
+        "pet": 1.1
+      }
+    },
+    {
+      "group": "climate",
+      "scenario": "pet_low",
+      "direction": "down",
+      "spec": {
+        "pet": 0.9
+      }
+    },
+    {
+      "group": "climate",
+      "scenario": "wa_high",
+      "direction": "up",
+      "spec": {
+        "wa": 1.2
+      }
+    },
+    {
+      "group": "climate",
+      "scenario": "wa_low",
+      "direction": "down",
+      "spec": {
+        "wa": 0.8
+      }
+    },
+    {
+      "group": "socioeconomic",
+      "scenario": "cost_high",
+      "direction": "up",
+      "spec": {
+        "c_trend": 0.031
+      }
+    },
+    {
+      "group": "socioeconomic",
+      "scenario": "cost_low",
+      "direction": "down",
+      "spec": {
+        "c_trend": 0.011
+      }
+    },
+    {
+      "group": "socioeconomic",
+      "scenario": "demand_high",
+      "direction": "up",
+      "spec": {
+        "g_d": 0.0271
+      }
+    },
+    {
+      "group": "socioeconomic",
+      "scenario": "demand_low",
+      "direction": "down",
+      "spec": {
+        "g_d": 0.0071
+      }
+    },
+    {
+      "group": "intervention",
+      "scenario": "irrig_high",
+      "direction": "up",
+      "spec": {
+        "s_irrig": 0.2275
+      }
+    },
+    {
+      "group": "intervention",
+      "scenario": "irrig_low",
+      "direction": "down",
+      "spec": {
+        "s_irrig": 0.1875
+      }
+    },
+    {
+      "group": "intervention",
+      "scenario": "subsidy_plus",
+      "direction": "up",
+      "spec": {
+        "tp_scale": 1.15
+      }
+    },
+    {
+      "group": "intervention",
+      "scenario": "subsidy_off",
+      "direction": "down",
+      "spec": {
+        "policy": false
+      }
+    }
+  ]
+}
