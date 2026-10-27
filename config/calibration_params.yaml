@@ -1,0 +1,71 @@
+# =====================================================================
+# Calibration settings for scripts/calibrate.py (Experiment 1)
+# =====================================================================
+
+# --- Input data (repository-relative paths) ----------------------------
+data:
+  annual_panel: data/raw/cahed_xinjiang_annual_panel.csv
+    # Xinjiang annual panel 2004-2023: year, area (ha), lint yield
+    # (t/ha), marketing-window price (CNY/t), unit cost (CNY/ha)
+  monthly_prices: data/raw/cahed_monthly_prices.csv
+    # CCINDEX 3128B monthly price series (context / cross-checks)
+  daily_global_price: data/raw/cahed_daily_global_price.csv
+    # daily international reference price (context / cross-checks)
+  precip_stats: data/raw/xinjiang_precip_observed_stats.csv
+    # aggregated observed precipitation statistics (132 station-years,
+    # five Tarim stations, 1981-2020): per-stage wet-day frequency,
+    # mean wet-day depth, stage totals, transition probabilities, and
+    # annual total with mean within-station CV.  Raw station records
+    # are not redistributable (see data/raw/README.md).
+
+# --- Stage 1: weather generator (MMPP) -----------------------------------
+weather:
+  n_years: 300    # length of the stochastic validation run
+  seed: 7
+
+# --- Stage 2: crop (yield & irrigation) -----------------------------------
+crop:
+  est_window: [2004, 2023]  # yield-detrending / calibration window
+  yield_col: yield_t_ha
+  n_years: 60               # simulation years per weather seed
+  seeds: [11, 12, 13]       # weather ensemble members per grid point
+  s_irrig_grid: [0.18, 0.20, 0.22, 0.24, 0.26, 0.28, 0.30]
+  s_target_grid: [0.32, 0.34, 0.36, 0.38, 0.40, 0.42, 0.44]
+  benchmarks:               # literature ranges (Chinese studies)
+    ir_mm: [450.0, 600.0]        # drip-irrigation quota, southern Xinjiang
+    et_mm: [640.0, 720.0]        # actual cotton ET (Jans et al. 2021)
+    wf_blue_m3_t: [2600.0, 3200.0]  # blue water footprint (Li et al. 2023)
+
+# --- Stage 3: market (supply-demand closure) ------------------------------
+market:
+  est_window: [2004, 2023]
+  supply_col: production_t             # Xinjiang lint output (t)
+  supply_col_national: production_china_t  # national lint output (t)
+  price_col: ccindex_sepnov            # domestic price target (CNY/t)
+  price_col_int: cotlook_sepnov_cny_t  # international price target (CNY/t)
+  anchor_year: 2014   # kappa0 anchor: P_eq(anchor) = observed price
+
+# --- Nerlove estimation (Eq. 14) ---------------------------------------
+nerlove:
+  est_window: [2004, 2023]  # estimation window [first, last] (years);
+                            # earlier panel rows lack price/cost data
+  area_col: area_ha       # sown area column (ha)
+  price_col: ccindex_sepnov  # marketing-window price, Sep-Nov (CNY/t)
+  cost_col: cost_cny_ha   # unit cost column (CNY/ha)
+  year_col: year
+  policy_col: null        # optional policy dummy column name (or null)
+  target_price:           # P_eff = max(price, TP) floor (Eqs. 15-16)
+    2014: 19800.0
+    2015: 19100.0
+  tp_default: 18600.0     # flat target price after 2015 (CNY/t)
+
+# --- GLUE calibration (Section 2.4) -------------------------------------
+glue:
+  enabled: false          # set true to run the GLUE engine (slow)
+  n_samples: 2000         # LHS samples over the prior hyper-rectangle
+  priors:                 # {parameter: [lower, upper]}
+    b1: [0.05, 0.40]      # weakly identified price elasticity
+  behavioral_threshold: 0.0   # NSE threshold for behavioural sets
+
+# --- Outputs -------------------------------------------------------------
+output_dir: results/calibration

@@ -1,0 +1,57 @@
+# =====================================================================
+# CAHED scenario ensemble — 14 one-way scenarios + baseline
+# (paper Section 3.3.2 / Supporting Text S8)
+# =====================================================================
+# One-way perturbations around the calibrated baseline, organized in
+# three driver families.  Each scenario is simulated with common
+# random numbers (CRN): member j of every scenario shares the same
+# weather and market seeds, so ensemble differences are attributable
+# to the imposed lever alone.
+
+design:
+  N: 30                   # simulation years (2014-2043)
+  start_year: 2014
+  anchor_year: 2014
+  window: 5
+  wx_seeds: [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035]
+  econ_seeds: [1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009]
+  members_per_scenario: 100
+  PET_mean: 3.37          # baseline PET cosine mean (mm/d)
+  tp_schedule:            # target-price schedule for the tp_scale lever
+    2014: 19800.0
+    2015: 19100.0
+    default: 18600.0
+
+scenarios:
+  - {group: baseline,        name: baseline,      direction: base, spec: {}}
+  # --- climate family -------------------------------------------------
+  - {group: climate,         name: rain_freq_high, direction: up,
+     spec: {rain_freq: 1.25}}
+  - {group: climate,         name: rain_freq_low,  direction: down,
+     spec: {rain_freq: 0.75}}
+  - {group: climate,         name: pet_high,       direction: up,
+     spec: {pet: 1.10}}
+  - {group: climate,         name: pet_low,        direction: down,
+     spec: {pet: 0.90}}
+  - {group: climate,         name: wa_high,        direction: up,
+     spec: {wa: 1.20}}
+  - {group: climate,         name: wa_low,         direction: down,
+     spec: {wa: 0.80}}
+  # --- socio-economic family ------------------------------------------
+  - {group: socioeconomic, name: cost_high,      direction: up,
+     spec: {c_trend: 0.031}}
+  - {group: socioeconomic, name: cost_low,       direction: down,
+     spec: {c_trend: 0.011}}
+  - {group: socioeconomic, name: demand_high,    direction: up,
+     spec: {g_d: 0.0271}}
+  - {group: socioeconomic, name: demand_low,     direction: down,
+     spec: {g_d: 0.0071}}
+  # --- human-intervention family --------------------------------------
+  - {group: intervention,  name: irrig_high,     direction: up,
+     spec: {s_irrig: 0.2275}}
+  - {group: intervention,  name: irrig_low,      direction: down,
+     spec: {s_irrig: 0.1875}}
+  - {group: intervention,  name: subsidy_plus,   direction: up,
+     spec: {tp_scale: 1.15}}
+  - {group: intervention,  name: subsidy_off,    direction: down,
+     spec: {policy: false}}
